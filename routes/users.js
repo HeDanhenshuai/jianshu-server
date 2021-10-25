@@ -4,22 +4,28 @@
  * @Author: CoderHD
  * @Date: 2021-10-23 23:34:49
  * @LastEditors: CoderHD
- * @LastEditTime: 2021-10-24 23:37:15
+ * @LastEditTime: 2021-10-25 23:03:03
  */
+
 const router = require('koa-router')()
-const { login } = require('../controller/users')
+const { login, reg, verify, updatePwd } = require('../controller/user')
 const userCtl = require('../controller/user')
 router.prefix('/users')
 
 
+//用户登陆
+router.post('/login', login)
+
+//用户注册
+router.post('/reg', reg)
 
 
+//验证用户登陆
+router.post('/verify', verify)
 
 
-
-
-
-
+//更新密码
+router.post('/update/pwd', updatePwd)
 
 
 
