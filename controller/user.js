@@ -4,7 +4,7 @@
  * @Author: CoderHD
  * @Date: 2021-10-24 15:12:29
  * @LastEditors: CoderHD
- * @LastEditTime: 2021-10-25 23:02:40
+ * @LastEditTime: 2021-10-28 22:35:31
  */
 //为每个模块添加控制器
 const { Users } = require('../models/users')
@@ -18,19 +18,22 @@ let jwt = require('jsonwebtoken')
 /*用户登陆*/
 const login = async ctx => {
 	//模拟用户登陆
+	console.log(ctx.request.body)
 	let { username, pwd } = ctx.request.body;
-	await Users.findOne({ username, pwd }).then(res => {
-		if (res) {
+	console.log(username, pwd)
+	await Users.findOne({ username }).then(rel => {
+		if (rel) {
 			let token = jwt.sign({
-				username: res.username,
-				_id: res._id
+				username: rel.username,
+				_id: rel._id
 			}, 'jianshu-server-jwt-hedan', {
 				expiresIn: 3600 * 24 * 7
 			})
 			ctx.body = {
 				code: 200,
 				msg: "登陆成功",
-				token
+				token,
+				_id: rel._id,
 			}
 		} else {
 			ctx.body = {
@@ -65,8 +68,8 @@ const reg = async ctx => {
 	}
 	await Users.create({
 		username, pwd
-	}).then(res => {
-		if (res) {
+	}).then(rel => {
+		if (rel) {
 			ctx.body = {
 				code: 200,
 				msg: "注册成功",
@@ -96,18 +99,18 @@ const verify = async ctx => {
 		//检验token
 		let result = jwt.verify(token, 'jianshu-server-jwt-hedan')
 		console.log(result._id)
-		await Users.findOne({ _id: result._id }).then(res => {
-			if (res) {
+		await Users.findOne({ _id: result._id }).then(rel => {
+			if (rel) {
 				ctx.body = {
 					code: 200,
 					msg: '用户认证成功',
-					user: res
+					user: rel
 				}
 			} else {
 				ctx.body = {
 					code: 500,
 					msg: '用户认证失败',
-					res: res
+					res: rel
 				}
 			}
 		}).catch(err => {
@@ -150,6 +153,43 @@ const updatePwd = async ctx => {
 			msg: '修改密码时出现异常'
 		}
 	})
+}
+
+
+
+// 修改用户个人资料
+const updatePersonal = async ctx => {
+	console.log(ctx.request.body)
+	let { _id, avatar = '', gender = '', description = '', phone = '', email = '' } = ctx.request.body
+	await Users.updateOne(
+		{ _id },
+		{
+			avatar,
+			gender,
+			description,
+			phone,
+			email,
+		}).then(res => {
+			//查看res中的参数
+			//console.log(res)
+			if (res.matchedCount > 0) {
+				ctx.body = {
+					code: 200,
+					msg: '资料已更新'
+				}
+			} else {
+				ctx.body = {
+					code: 300,
+					msg: '资料更新失败'
+				}
+			}
+		}).catch(err => {
+			ctx.body = {
+				code: 500,
+				msg: '资料更新异常',
+				err
+			}
+		})
 }
 
 
@@ -206,5 +246,6 @@ module.exports = {
 	userFind,
 	userFindOne,
 	login, reg,
-	verify, updatePwd
+	verify, updatePwd,
+	updatePersonal
 }

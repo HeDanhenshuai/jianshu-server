@@ -4,11 +4,11 @@
  * @Author: CoderHD
  * @Date: 2021-10-23 23:34:49
  * @LastEditors: CoderHD
- * @LastEditTime: 2021-10-25 23:03:03
+ * @LastEditTime: 2021-10-29 22:28:48
  */
 
 const router = require('koa-router')()
-const { login, reg, verify, updatePwd } = require('../controller/user')
+const { login, reg, verify, updatePwd, updatePersonal } = require('../controller/user')
 const userCtl = require('../controller/user')
 router.prefix('/users')
 
@@ -28,7 +28,8 @@ router.post('/verify', verify)
 router.post('/update/pwd', updatePwd)
 
 
-
+//修改用户个人资料
+router.post('/update/personal', updatePersonal)
 
 
 //查看对象的属性和方法
