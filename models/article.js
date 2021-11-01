@@ -4,7 +4,7 @@
  * @Author: CoderHD
  * @Date: 2021-10-29 00:16:56
  * @LastEditors: CoderHD
- * @LastEditTime: 2021-10-29 00:20:27
+ * @LastEditTime: 2021-11-01 22:48:29
  */
 let mongoose = require('mongoose')
 
@@ -25,7 +25,7 @@ let schema = new mongoose.Schema({
 		default: 0
 	},
 	comment: {
-		type: String,
+		type: Number,
 		default: 0
 	},
 	author: String

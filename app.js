@@ -4,7 +4,7 @@
  * @Author: CoderHD
  * @Date: 2021-10-23 23:34:49
  * @LastEditors: CoderHD
- * @LastEditTime: 2021-10-29 22:50:46
+ * @LastEditTime: 2021-11-02 00:14:36
  */
 const Koa = require('koa')
 const app = new Koa()
@@ -24,6 +24,10 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const upload = require('./routes/upload')
 const article = require('./routes/article')
+const comment = require('./routes/comment')
+const fans = require('./routes/fans')
+
+
 
 
 // error handler
@@ -67,6 +71,10 @@ app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(upload.routes(), upload.allowedMethods())
 app.use(article.routes(), article.allowedMethods())
+app.use(comment.routes(), comment.allowedMethods())
+app.use(fans.routes(), fans.allowedMethods())
+
+
 
 // error-handling
 app.on('error', (err, ctx) => {
